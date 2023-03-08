@@ -47,7 +47,7 @@ function Navbar() {
     return (
         <nav className="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div className="container">
-                <Link to="/" className="navbar-brand">Laravel React Auth</Link>
+                <Link to="/" className="navbar-brand">Payroll Inc</Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">

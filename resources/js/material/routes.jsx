@@ -5,8 +5,10 @@ import {
   BellIcon,
   ArrowRightOnRectangleIcon,
   UserPlusIcon,
+    UserIcon,
+    DocumentTextIcon
 } from "@heroicons/react/24/solid";
-import { Home, Employee, Profile, Tables, Notifications } from "@/pages/dashboard";
+import { Home, Employee, Invoice, Profile, Tables, Notifications } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 
 const icon = {
@@ -25,29 +27,35 @@ export const routes = [
         element: <Home />,
       },
         {
-            icon: <HomeIcon {...icon} />,
+            icon: <UserIcon {...icon} />,
             name: "employee",
             path: "/employee",
             element: <Employee />,
         },
+        // {
+        //     icon: <DocumentTextIcon {...icon} />,
+        //     name: "invoice",
+        //     path: "/invoice",
+        //     element: <Invoice />,
+        // },
       {
         icon: <UserCircleIcon {...icon} />,
         name: "profile",
         path: "/profile",
         element: <Profile />,
       },
-      {
-        icon: <TableCellsIcon {...icon} />,
-        name: "tables",
-        path: "/tables",
-        element: <Tables />,
-      },
-      {
-        icon: <BellIcon {...icon} />,
-        name: "notifactions",
-        path: "/notifactions",
-        element: <Notifications />,
-      },
+      // {
+      //   icon: <TableCellsIcon {...icon} />,
+      //   name: "tables",
+      //   path: "/tables",
+      //   element: <Tables />,
+      // },
+      // {
+      //   icon: <BellIcon {...icon} />,
+      //   name: "notifactions",
+      //   path: "/notifactions",
+      //   element: <Notifications />,
+      // },
     ],
   },
   {

@@ -2,10 +2,10 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
-    <link rel="icon" type="image/svg+xml" href="/img/favicon.png" />
+    <link rel="icon" type="image/svg+xml" href="/img/24042614.jpg" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel React Auth</title>
+    <title>Payroll Inc</title>
     <!-- Fonts -->
      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet"/>
 

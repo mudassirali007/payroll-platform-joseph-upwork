@@ -19,7 +19,7 @@ export const Home = () => {
         <div className="row justify-content-center">
             <div className="col-md-8">
                 <div className="card">
-                    <div className="card-header">Laravel React Auth</div>
+                    <div className="card-header">Payroll Inc</div>
 
                     <div className="card-body">
                         {
