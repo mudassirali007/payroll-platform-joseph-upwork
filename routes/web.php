@@ -22,6 +22,7 @@ Route::group(['prefix' => 'api'], function () {
         Route::post('/me', [App\Http\Controllers\Api\LoginController::class, 'me']);
         Route::put('/updateUser', [App\Http\Controllers\Api\UserController::class, 'updateUser']);
         Route::apiResource('employee', App\Http\Controllers\Api\EmployeeController::class)->only(['index', 'store', 'update', 'destroy']);
+        Route::apiResource('invoice', App\Http\Controllers\Api\InvoiceController::class)->only(['index', 'store']);
     });
 });
 // Route::view('/{any}', 'app')->where('any', '.*');
