@@ -38,7 +38,7 @@ export function Invoice() {
     }
 
     useEffect(() => {
-        fetchData();
+        if(!invoices.length) fetchData();
     },[])
 
     const handleOpen = () => setOpen(!open);
