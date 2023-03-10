@@ -39,7 +39,7 @@ export const useAuth = () => {
         setUserdata({signedIn: true, user});
         sessionStorage.setItem('user',JSON.stringify(user))
 
-        navigate('/');
+        navigate('/dashboard/home');
     }
 
     function updateLoggedUser(user) {
