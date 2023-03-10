@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
+use App\Models\Employee;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class InvoiceController extends Controller
 {
@@ -17,7 +20,7 @@ class InvoiceController extends Controller
      */
     public function index(): Response
     {
-        $invoices = Invoice::where('user_id', auth()->user()->id)->get();
+        $invoices = Invoice::with('employee')->where('user_id', auth()->user()->id)->get();
         return response($invoices, 200);
     }
 
@@ -35,9 +38,9 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
       $validator = Validator::make($request->all(), [
-                'employee_id' => ['required', 'string', 'max:255'],
+                'employee_id' => ['required', 'integer'],
                 'currency' => ['required', 'string', 'max:255'],
-                'unit_price' => ['required', 'string', 'max:255'],
+                'unit_price' => ['required', 'integer'],
                 'payment_address' => ['required', 'string', 'max:255'],
                 'payment_currency' => ['required', 'string', 'max:255'],
             ]);
@@ -48,9 +51,11 @@ class InvoiceController extends Controller
         $getInvoiceResponse = Http::withHeaders([
                                     'Authorization' => \Config::get('request.key')
                                 ])->get(\Config::get('request.url').'/invoices/next-number')->json();
-        $employee = Employee::where([['user_id', auth()->user()->id],['id', $request->employee_id]])->get();
-
-        if(isset($getInvoiceResponse['invoiceNumber'] && isset($employee->id){
+        if(isset($getInvoiceResponse['errors'])) {
+            return response(['status' => false, 'message' => 'fix errors', 'errors' => $getInvoiceResponse['errors']], 500);
+        }
+        $employee = Employee::where([['user_id', auth()->user()->id],['id', $request->employee_id]])->first();
+        if(isset($getInvoiceResponse['invoiceNumber']) && isset($employee->id)){
         $response = Http::withHeaders([
                         'Authorization' => \Config::get('request.key')
                     ])->post(\Config::get('request.url').'/invoices', [
@@ -66,7 +71,7 @@ class InvoiceController extends Controller
                               "unitPrice" => $request->unit_price
                             ]
                         ],
-                        "invoiceNumber" => $getInvoiceResponse['invoiceNumber'],
+                        "invoiceNumber" => Str::uuid(),
                         "sellerInfo" => [
                             "email" => $employee->email,
                             "firstName" => $employee->name
@@ -74,7 +79,11 @@ class InvoiceController extends Controller
                         "paymentAddress" => $request->payment_address,
                         "paymentCurrency" => $request->payment_currency
                     ])->json();
+        if(isset($response['errors'])) {
+           return response(['status' => false, 'message' => 'fix errors', 'errors' => $response['errors']], 500);
+        }
 
+//         dd($response);
         $invoice = new Invoice();
         $invoice->user_id = auth()->user()->id;
         $invoice->employee_id = $employee->id;
@@ -82,9 +91,10 @@ class InvoiceController extends Controller
         $invoice->creationDate = $response['creationDate'];
         $invoice->unit_price = $response['invoiceItems'][0]['unitPrice'];
         $invoice->invoice_number = $response['invoiceNumber'];
+        $invoice->invoice_id = $response['id'];
         $invoice->payment_address = $response['paymentAddress'];
         $invoice->payment_currency = $response['paymentCurrency'];
-        $invoice->data = $response;
+        $invoice->data = json_encode($response);
         $invoice->save();
         return response(['status' => true,'success'=>'true','message' => 'Successfully Done.','invoice' => ['id'=>$invoice->id] ], 200);
         } else {

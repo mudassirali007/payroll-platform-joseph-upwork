@@ -32,12 +32,12 @@ export const routes = [
             path: "/employee",
             element: <Employee />,
         },
-        // {
-        //     icon: <DocumentTextIcon {...icon} />,
-        //     name: "invoice",
-        //     path: "/invoice",
-        //     element: <Invoice />,
-        // },
+        {
+            icon: <DocumentTextIcon {...icon} />,
+            name: "invoice",
+            path: "/invoice",
+            element: <Invoice />,
+        },
       {
         icon: <UserCircleIcon {...icon} />,
         name: "profile",

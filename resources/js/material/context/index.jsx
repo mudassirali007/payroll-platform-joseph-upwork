@@ -34,6 +34,9 @@ export function reducer(state, action) {
     case "GET_EMPLOYEES": {
       return { ...state, employees: action.value };
     }
+    case "GET_INVOICES": {
+      return { ...state, invoices: action.value };
+    }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
     }
@@ -48,7 +51,8 @@ export function MaterialTailwindControllerProvider({ children }) {
     transparentNavbar: true,
     fixedNavbar: true,
     openConfigurator: false,
-    employees: []
+    employees: [],
+    invoices: [],
   };
 
   const [controller, dispatch] = React.useReducer(reducer, initialState);
@@ -96,3 +100,5 @@ export const setOpenConfigurator = (dispatch, value) =>
   dispatch({ type: "OPEN_CONFIGURATOR", value });
 export const setEmployees = (dispatch, value) =>
     dispatch({ type: "GET_EMPLOYEES", value });
+export const setInvoices = (dispatch, value) =>
+    dispatch({ type: "GET_INVOICES", value });
