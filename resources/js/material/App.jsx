@@ -2,13 +2,18 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { Dashboard, Auth } from "@/layouts";
 
 import {AuthContext} from "@/context";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useAuth} from "@/hooks/useAuth";
 import RouteProtection from "@/utils/RouteProtection";
 
 
 function App() {
-    const {userData} = useAuth();
+
+    const {userData, loginUserOnStartup} = useAuth();
+    useEffect(() => {
+        console.log('loginUserOnStartup called')
+        // loginUserOnStartup();
+    }, []);
 
     const [authData, setAuthData] = useState({signedIn: userData.signedIn, user: userData.user});
 

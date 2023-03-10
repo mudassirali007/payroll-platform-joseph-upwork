@@ -11,20 +11,17 @@ import {useMaterialTailwindController, setOpenConfigurator, setEmployees} from "
 import React, {useContext, useEffect} from "react";
 import {AuthContext} from "@/context";
 import axios from "axios";
-import {useAuth} from "../../hooks/useAuth";
 
 export function Dashboard() {
   const [controller, dispatch] = useMaterialTailwindController();
   const { sidenavType } = controller;
     const {authData} = useContext(AuthContext);
     const navigate = useNavigate();
-    const {setLogout} = useAuth();
     const fetchData = () => {
         axios.get('/api/employee').then(response => {
             if(response.status === 200) setEmployees(dispatch, response.data || []);
         }).catch(error => {
             console.error(error);
-            if(error.message === 'Unauthenticated.') setLogout()
         });
     }
     useEffect(() => {
