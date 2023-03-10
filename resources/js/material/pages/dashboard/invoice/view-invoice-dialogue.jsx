@@ -24,7 +24,7 @@ export function ViewInvoiceDialogue({handleOpen,id}) {
                 <DialogHeader>{'View'} Invoice</DialogHeader>
                 <DialogBody className="flex flex-col gap-4" divider>
                     <Input size="lg" label="Invoice ID" readOnly defaultValue={invoice.invoice_id} />
-                    <Input size="lg" label="Creation Date"  defaultValue={invoice.creationDate} />
+                    <Input size="lg" label="Creation Date"  defaultValue={new Date(invoice.creationDate).toDateString()} />
                     <Input size="lg" label="Selected Currency" defaultValue={invoice.currency} />
                     <Input size="lg" label="Employee Name" defaultValue={invoice.employee.name} />
                     <Input size="lg" label="Employee Email" defaultValue={invoice.employee.email} />
