@@ -12,7 +12,7 @@ function App() {
     const {userData, loginUserOnStartup} = useAuth();
     useEffect(() => {
         console.log('loginUserOnStartup called')
-        // loginUserOnStartup();
+        loginUserOnStartup();
     }, []);
 
     const [authData, setAuthData] = useState({signedIn: userData.signedIn, user: userData.user});

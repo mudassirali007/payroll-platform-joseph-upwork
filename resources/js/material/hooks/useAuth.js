@@ -63,16 +63,18 @@ export const useAuth = () => {
         const cookie = new Cookies();
         if(cookie.get('is_auth')) {
             axios.post('/api/me').then(response => {
-                setUserdata({signedIn: true, user: response.data.user});
-                navigate('/dashboard/home');
+                setAsLogged(response.data.user)
+                // setUserdata({signedIn: true, user: response.data.user});
+                // navigate('/dashboard/home');
             }).catch(error => {
-                setUserdata({signedIn: false, user: null});
+                // setUserdata({signedIn: false, user: null});
                 setLogout();
             });
 
         } else {
-            setUserdata({signedIn: false, user: null});
-            navigate('/auth/sign-in');
+            setLogout();
+            // setUserdata({signedIn: false, user: null});
+            // navigate('/auth/sign-in');
         }
     }
 
