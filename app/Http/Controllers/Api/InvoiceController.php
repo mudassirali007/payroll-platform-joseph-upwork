@@ -96,7 +96,7 @@ class InvoiceController extends Controller
         $invoice->payment_currency = $response['paymentCurrency'];
         $invoice->data = json_encode($response);
         $invoice->save();
-        return response(['status' => true,'success'=>'true','message' => 'Successfully Done.','invoice' => ['id'=>$invoice->id] ], 200);
+        return response(['status' => true,'success'=>'true','message' => 'Successfully Done.','invoice' => $invoice::with('employee')->where('id',$invoice->id)->first() ], 200);
         } else {
             return response(['status' => false, 'message' => 'Unable to create invoice'], 500);
         }

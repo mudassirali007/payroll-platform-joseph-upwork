@@ -95,7 +95,7 @@ export function EmployeeDialogue({handleOpen,employee}) {
                         message && <Alert>{message}</Alert>
                     }
                     <Input label="Name" size="lg"  name="name" required autoComplete="name" autoFocus value={name} onChange={e => setName(e.target.value)}/>
-                    <Input disabled={id}  type="email" label="Email" size="lg"  name="email" required autoComplete="email" value={email} onChange={e => setEmail(e.target.value)}/>
+                    <Input disabled={id} type="email" label="Email" size="lg"  name="email" required autoComplete="email" value={email} onChange={e => setEmail(e.target.value)}/>
                     <Input label="Department" size="lg"  name="department" required autoComplete="department"  value={department} onChange={e => setDepartment(e.target.value)}/>
                     <Input label="Job Title" size="lg"  name="jobTitle" required autoComplete="jobTitle"  value={jobTitle} onChange={e => setJobTitle(e.target.value)}/>
                     { renderFieldError('name') }
