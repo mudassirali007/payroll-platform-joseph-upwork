@@ -1,5 +1,10 @@
 import {Routes, Route, useNavigate, Navigate} from "react-router-dom";
-
+import {
+    IconButton,
+} from "@material-tailwind/react";
+import {
+    Cog6ToothIcon,
+} from "@heroicons/react/24/solid";
 import {
   Sidenav,
   DashboardNavbar,

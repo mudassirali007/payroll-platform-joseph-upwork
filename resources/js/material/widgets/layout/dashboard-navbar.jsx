@@ -62,7 +62,16 @@ export function DashboardNavbar() {
       blurred={fixedNavbar}
     >
       <div className="flex flex-col-reverse justify-between gap-6 md:flex-row md:items-center">
-        <div className="capitalize">
+
+          <div className="capitalize">
+              <IconButton
+                  variant="text"
+                  color="blue-gray"
+                  className="grid xl:hidden"
+                  onClick={() => setOpenSidenav(dispatch, !openSidenav)}
+              >
+                  <Bars3Icon strokeWidth={3} className="h-6 w-6 text-blue-gray-500" />
+              </IconButton>
           <Breadcrumbs
             className={`bg-transparent p-0 transition-all ${
               fixedNavbar ? "mt-1" : ""
@@ -93,19 +102,12 @@ export function DashboardNavbar() {
           {/*<div className="mr-auto md:mr-4 md:w-56">*/}
           {/*  <Input label="Type here" />*/}
           {/*</div>*/}
-          {/*<IconButton*/}
-          {/*  variant="text"*/}
-          {/*  color="blue-gray"*/}
-          {/*  className="grid xl:hidden"*/}
-          {/*  onClick={() => setOpenSidenav(dispatch, !openSidenav)}*/}
-          {/*>*/}
-          {/*  <Bars3Icon strokeWidth={3} className="h-6 w-6 text-blue-gray-500" />*/}
-          {/*</IconButton>*/}
+
           {/*<Link to="/auth/sign-in">*/}
             <Button
               variant="text"
               color="blue-gray"
-              className="hidden items-center gap-1 px-4 xl:flex"
+              className="items-center gap-1 px-4 xl:flex"
               onClick={handleLogout}
               disabled={loaderVisible}
             >
