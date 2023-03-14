@@ -54,7 +54,7 @@ export function Invoice() {
             <Card>
                 <CardHeader variant="gradient" color="blue" className="flex items-center mb-8 p-6">
                     <Typography variant="h6" color="white">
-                        Invoice Table
+                        Salary Table
                     </Typography>
                     <Button className="ml-auto" variant="gradient" color="green" onClick={()=> {handleOpen()}}>
                         Create

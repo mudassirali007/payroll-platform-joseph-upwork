@@ -34,8 +34,8 @@ export const routes = [
         },
         {
             icon: <DocumentTextIcon {...icon} />,
-            name: "invoice",
-            path: "/invoice",
+            name: "salaries",
+            path: "/salary",
             element: <Invoice />,
         },
       {
