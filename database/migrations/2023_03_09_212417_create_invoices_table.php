@@ -19,9 +19,11 @@ return new class extends Migration
          $table->string('unit_price');
          $table->string('invoice_number');
          $table->string('invoice_id');
+         $table->string('request_id');
          $table->string('payment_address');
          $table->string('payment_currency');
          $table->json('data')->nullable();
+         $table->json('dataOnChain')->nullable();
          $table->foreignId('employee_id')
                                      ->constrained()
                                      ->onUpdate('cascade')

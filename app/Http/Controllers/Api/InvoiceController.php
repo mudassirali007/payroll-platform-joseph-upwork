@@ -82,7 +82,11 @@ class InvoiceController extends Controller
         if(isset($response['errors'])) {
            return response(['status' => false, 'message' => 'fix errors', 'errors' => $response['errors']], 500);
         }
-
+        $onChainResponse = Http::withHeaders(['Authorization' => \Config::get('request.key')
+                            ])->post(\Config::get('request.url').'/invoices'.'/'.$response['id'])->json();
+        if(isset($onChainResponse['errors'])) {
+              return response(['status' => false, 'message' => 'fix errors', 'errors' => $onChainResponse['errors']], 500);
+        }
 //         dd($response);
         $invoice = new Invoice();
         $invoice->user_id = auth()->user()->id;
@@ -92,17 +96,17 @@ class InvoiceController extends Controller
         $invoice->unit_price = $response['invoiceItems'][0]['unitPrice'];
         $invoice->invoice_number = $response['invoiceNumber'];
         $invoice->invoice_id = $response['id'];
+        $invoice->request_id = $onChainResponse['requestId'];
         $invoice->payment_address = $response['paymentAddress'];
         $invoice->payment_currency = $response['paymentCurrency'];
         $invoice->data = json_encode($response);
+        $invoice->dataOnChain = json_encode($onChainResponse);
         $invoice->save();
+
         return response(['status' => true,'success'=>'true','message' => 'Successfully Done.','invoice' => $invoice::with('employee')->where('id',$invoice->id)->first() ], 200);
         } else {
             return response(['status' => false, 'message' => 'Unable to create invoice'], 500);
         }
-
-
-
     }
 
     /**
