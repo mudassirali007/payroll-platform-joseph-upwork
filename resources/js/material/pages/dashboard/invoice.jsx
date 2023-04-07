@@ -15,21 +15,35 @@ import ViewInvoiceDialogue from "@/pages/dashboard/invoice/view-invoice-dialogue
 import {setInvoices, useMaterialTailwindController} from "@/context";
 import ArrowTopRightOnSquareIcon from "@heroicons/react/24/solid/ArrowTopRightOnSquareIcon";
 import {useForm} from "@/hooks/useForm";
-import { init, useConnectWallet } from '@web3-onboard/react'
+import { init, useConnectWallet, useSetChain } from '@web3-onboard/react'
 import injectedModule from '@web3-onboard/injected-wallets'
 import { ethers } from 'ethers'
 import coinbaseWalletModule from '@web3-onboard/coinbase'
+import ledgerModule from '@web3-onboard/ledger'
+import walletConnectModule from '@web3-onboard/walletconnect'
+
 
 const dappId = 'd8feb4f6-076c-441a-ab9b-e23a70bcbab7'
 const injected = injectedModule()
 const coinbase = coinbaseWalletModule()
+const ledger = ledgerModule()
+const walletConnect = walletConnectModule({
+    version: 2,
+    handleUri: uri => console.log(uri),
+    projectId: '92305bbe8b80e3805d2fb91bea585ca5'
+})
 const infuraKey = 'b4d8b2570b8440c6a6528ed5dd92d5f2'
 // initialize Onboard
 init({
     apiKey: dappId,
+    connect: {
+        autoConnectLastWallet: true
+    },
     wallets: [
         injected,
-        coinbase
+        coinbase,
+        ledger,
+        walletConnect
     ],
     chains: [
         {
@@ -112,6 +126,13 @@ export function Invoice() {
 
 
     const [{ wallet, connecting }, connect, disconnect] = useConnectWallet()
+    const [{ chains, connectedChain, settingChain }, setChain] = useSetChain()
+    let provider
+    useEffect(() => {
+        console.log(wallet,connectedChain)
+       
+    },[wallet])
+
     let ethersProvider
 
     if (wallet) {
