@@ -18,7 +18,12 @@ import PropTypes from "prop-types";
 import ButtonLoader from "@/widgets/loader/button-loader";
 import {setInvoices, useMaterialTailwindController} from "@/context";
 import { currencyData } from "@/data";
+import {initWeb3Onboard} from "@/services/blockchain";
+import {useConnectWallet, useSetChain} from "@web3-onboard/react";
+import {ethers} from "ethers";
 
+
+let provider
 export function InvoiceDialogue({handleOpen}) {
 
     const cryptoCurrency = currencyData.filter((item)=> item.network)
@@ -62,6 +67,8 @@ export function InvoiceDialogue({handleOpen}) {
         return true
     }
 
+
+
     const onSubmit = () => {
         if(!validation()) return
         setLoaderVisibility(true)
@@ -91,6 +98,109 @@ export function InvoiceDialogue({handleOpen}) {
 
             setLoaderVisibility(false)
         });
+    };
+
+    const [web3Onboard, setWeb3Onboard] = useState(null)
+    // default test transaction to Goerli
+    const [toChain, setToChain] = useState('0x5')
+    useEffect(() => {
+        setWeb3Onboard(initWeb3Onboard)
+    }, [])
+    const [{ wallet, connecting }, connect, disconnect] = useConnectWallet()
+    const [{ chains, connectedChain, settingChain }, setChain] = useSetChain()
+
+    // const [provider, setProvider] = useState(null)
+    useEffect(() => {
+        console.log(wallet,connectedChain)
+
+    },[wallet])
+
+    useEffect(() => {
+        if (!wallet?.provider) {
+            provider = null
+            // setProvider(null)
+        } else {
+            provider = new ethers.providers.Web3Provider(wallet.provider, 'any')
+            // provider = new ethers.BrowserProvider(wallet.provider, 'any')
+            // setProvider(new ethers.BrowserProvider(wallet.provider, 'any'))
+
+        }
+    }, [wallet])
+    const readyToTransact = async () => {
+        if (!wallet) {
+            handleOpen()
+            const walletSelected = await connect()
+            if (!walletSelected) return false
+        }
+        // prompt user to switch to Goerli for test
+        await setChain({ chainId: toChain })
+
+        return true
+    }
+    const sendHash = async () => {
+        if (!paymentAddress) {
+            alert('An Ethereum address to send Eth to is required.')
+            return
+        }
+        const signer = provider.getUncheckedSigner()
+        // const signer = provider.getSigner()
+
+        // To set gas using the Web3-Onboard Gas package(support Eth Mainnet and Polygon)
+        // define desired confidence for transaction inclusion in block and set in transaction
+        // const bnGasForTransaction = bnGasPrices.find(gas => gas.confidence === 90)
+
+        const rc = await signer.sendTransaction({
+            to: paymentAddress,
+            value: 1000000000000000
+
+            // This will set the transaction gas based on desired confidence
+            // maxPriorityFeePerGas: gweiToWeiHex(
+            //   bnGasForTransaction.maxPriorityFeePerGas
+            // ),
+            // maxFeePerGas: gweiToWeiHex(bnGasForTransaction.maxFeePerGas)
+        })
+        console.log(rc)
+    }
+
+    const sendTransaction = async () => {
+        if (!paymentAddress) {
+            alert('An Ethereum address to send Eth to is required.')
+        }
+        const balanceValue = Object.values(wallet.accounts[0].balance)[0]
+
+        const signer = provider.getUncheckedSigner()
+
+        const txDetails = {
+            to: paymentAddress,
+            value: 1000000000000000
+        }
+
+        const sendTransaction = () => {
+            return signer.sendTransaction(txDetails).then(tx => tx.hash)
+        }
+
+        const gasPrice = () => provider.getGasPrice().then(res => res.toString())
+
+        const estimateGas = () => {
+            return provider.estimateGas(txDetails).then(res => res.toString())
+        }
+        console.log(estimateGas)
+
+        // convert to hook when available
+        const transactionHash =
+            await web3Onboard.state.actions.preflightNotifications({
+                sendTransaction,
+                gasPrice,
+                estimateGas,
+                balance: balanceValue,
+                txDetails: txDetails
+            })
+        console.log(transactionHash)
+    }
+    const onPay = async () => {
+        const ready = await readyToTransact()
+        if (!ready) return
+        sendHash()
     };
 
     return (
@@ -162,10 +272,17 @@ export function InvoiceDialogue({handleOpen}) {
                     >
                         <span>Cancel</span>
                     </Button>
-                    <Button disabled={loaderVisible} variant="gradient" color="green" onClick={()=>onSubmit()}>
+                    <Button disabled={loaderVisible} variant="gradient" color="green" onClick={()=>onSubmit()}  className="mr-1">
                         <span>{'Create'}</span>
                         {loaderVisible && <ButtonLoader />}
                     </Button>
+                    <Button disabled={loaderVisible} variant="gradient" color="green"
+                            onClick={()=>onPay()}
+                    >
+                        <span>{connecting ? 'Connecting' : !wallet ? 'Connect' : 'Pay'}</span>
+                        {loaderVisible && <ButtonLoader />}
+                    </Button>
+
                 </DialogFooter>
             </Dialog>
         </>

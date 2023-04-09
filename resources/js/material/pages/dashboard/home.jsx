@@ -31,15 +31,17 @@ import {AuthContext} from "@/context";
 import {useNavigate} from "react-router-dom";
 import PencilSquareIcon from "@heroicons/react/24/solid/PencilSquareIcon";
 import {TrashIcon} from "@heroicons/react/24/solid";
+import {useAuth} from "@/hooks/useAuth";
 
 export function Home() {
     const {authData} = useContext(AuthContext);
     const navigate = useNavigate();
-
+    const {disconnectWallet} = useAuth();
     useEffect(() => {
         console.log('Home',authData.signedIn)
         if(!authData.signedIn) {
             navigate('/auth/sign-in');
+            disconnectWallet()
         }
     }, []);
 

@@ -5,6 +5,7 @@ import {useNavigate} from "react-router-dom";
 
 import {AuthContext} from "@/context";
 import axios from "axios";
+import {useConnectWallet} from "@web3-onboard/react";
 
 export const useAuth = () => {
     let navigate = useNavigate();
@@ -15,7 +16,7 @@ export const useAuth = () => {
         initState = {signedIn: true, user}
     }
     const [userData, setUserdata] = useState(initState);
-
+    const [{ wallet, connecting }, connect, disconnect] = useConnectWallet()
     const {setAuthData} = useContext(AuthContext);
 
     useEffect(() => {
@@ -56,6 +57,11 @@ export const useAuth = () => {
         setUserdata({signedIn: false, user: null});
         sessionStorage.removeItem('user')
         navigate('/auth/sign-in');
+        disconnectWallet()
+    }
+
+    async function disconnectWallet() {
+        if(wallet) await disconnect(wallet)
     }
 
     function loginUserOnStartup()
@@ -80,6 +86,7 @@ export const useAuth = () => {
 
     return {
         userData,
+        disconnectWallet,
         setAsLogged,
         setLogout,
         loginUserOnStartup,
