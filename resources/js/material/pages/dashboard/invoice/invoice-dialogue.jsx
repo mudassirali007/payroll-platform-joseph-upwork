@@ -21,9 +21,11 @@ import { currencyData } from "@/data";
 import {initWeb3Onboard} from "@/services/blockchain";
 import {useConnectWallet, useSetChain} from "@web3-onboard/react";
 import {ethers} from "ethers";
+import erc20abi from "@/smartContract/erc20ABI.json";
 
 
 let provider
+let erc20
 export function InvoiceDialogue({handleOpen}) {
 
     const cryptoCurrency = currencyData.filter((item)=> item.network)
@@ -133,9 +135,22 @@ export function InvoiceDialogue({handleOpen}) {
             if (!walletSelected) return false
         }
         // prompt user to switch to Goerli for test
-        await setChain({ chainId: toChain })
+        // await setChain({ chainId: toChain })
 
         return true
+    }
+    const sendHash2 = async () => {
+        if (!paymentAddress) {
+            alert('An Ethereum address to send Eth to is required.')
+            return
+        }
+
+        const signer = await provider.getUncheckedSigner();
+        const erc20 = new ethers.Contract('0x67a37971097B182b12f9FB38955bF537786516ba', erc20abi, signer);
+        console.log(erc20)
+        // return
+        const rc = await erc20.transferWithReferenceAndFee(paymentAddress,'0x84849086a9650229',0,'0x34236c6e24Ef0826E13b898E60044e422DC6b19D');
+        console.log(rc)
     }
     const sendHash = async () => {
         if (!paymentAddress) {
@@ -200,7 +215,7 @@ export function InvoiceDialogue({handleOpen}) {
     const onPay = async () => {
         const ready = await readyToTransact()
         if (!ready) return
-        sendHash()
+        sendHash2()
     };
 
     return (
