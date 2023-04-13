@@ -144,6 +144,10 @@ export function InvoiceDialogue({handleOpen}) {
             alert('An Ethereum address to send Eth to is required.')
             return
         }
+        if (unitPrice <= 0) {
+            alert('Enter Valid Amount.')
+            return
+        }
 
         const signer = await provider.getUncheckedSigner();
         const erc20 = new ethers.Contract(process.env.MIX_CONTRACT_ADDRESS_SEPOLIA, erc20abi, signer);
@@ -240,7 +244,7 @@ export function InvoiceDialogue({handleOpen}) {
                         renderInput={(params) => <TextField {...params} label="Select Currency" />}
                     />
 
-                    <Input label="Amount" size="lg"  name="unit_price" required autoComplete="unit_price" autoFocus value={unitPrice} onChange={e => setUnitPrice(e.target.value)}/>
+                    <Input label="Amount" size="lg" type="number"  name="unit_price" required autoComplete="unit_price" autoFocus value={unitPrice} onChange={e => setUnitPrice(e.target.value)}/>
                     <Autocomplete
                         value={paymentCurrency}
                         onChange={(event, newValue) => {
