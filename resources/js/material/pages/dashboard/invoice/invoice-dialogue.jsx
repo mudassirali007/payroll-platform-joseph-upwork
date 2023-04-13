@@ -148,12 +148,17 @@ export function InvoiceDialogue({handleOpen}) {
             alert('Enter Valid Amount.')
             return
         }
+        try {
 
-        const signer = await provider.getUncheckedSigner();
-        const erc20 = new ethers.Contract(process.env.MIX_CONTRACT_ADDRESS_SEPOLIA, erc20abi, signer);
+            const signer = await provider.getUncheckedSigner();
+            const erc20 = new ethers.Contract(process.env.MIX_CONTRACT_ADDRESS_SEPOLIA, erc20abi, signer);
 
-        const rc = await erc20.transferWithReferenceAndFee(paymentAddress,'0x84849086a9650229',ethers.utils.parseEther(`${unitPrice * 0.05}`),process.env.MIX_TARGET_ADDRESS_SEPOLIA, {value: ethers.utils.parseEther(`${unitPrice}`)});
-        console.log(rc)
+            const rc = await erc20.transferWithReferenceAndFee(paymentAddress,'0x84849086a9650229',ethers.utils.parseEther(`${unitPrice * 0.05}`),process.env.MIX_TARGET_ADDRESS_SEPOLIA, {value: ethers.utils.parseEther(`${unitPrice}`)});
+            console.log(rc)
+            if(rc.hash) setMessage(`https://sepolia.etherscan.io/tx/${rc.hash}`)
+        } catch (e) {
+            setMessage(e.message)
+        }
     }
     const sendHash = async () => {
         if (!paymentAddress) {
