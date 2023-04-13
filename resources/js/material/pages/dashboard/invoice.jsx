@@ -15,6 +15,7 @@ import ViewInvoiceDialogue from "@/pages/dashboard/invoice/view-invoice-dialogue
 import {setInvoices, useMaterialTailwindController} from "@/context";
 import ArrowTopRightOnSquareIcon from "@heroicons/react/24/solid/ArrowTopRightOnSquareIcon";
 import {useForm} from "@/hooks/useForm";
+import {useConnectWallet} from "@web3-onboard/react";
 
 
 export function Invoice() {
@@ -41,12 +42,27 @@ export function Invoice() {
         if(!invoices.length) fetchData();
     },[])
 
+
     const handleOpen = () => setOpen(!open);
 
     const handleView = () => setView(!view);
     const selectInvoice = (invoice_id) => setSelectedInvoice(invoice_id);
 
+    const [{ wallet, connecting }, connect, disconnect] = useConnectWallet()
+    const readyToTransact = async () => {
+        if (!wallet) {
+            const walletSelected = await connect()
+            if (!walletSelected) return false
+        }
 
+        return true
+    }
+    const onPay = async () => {
+        const ready = await readyToTransact()
+        if (!ready) return
+        if(wallet) handleOpen()
+
+    };
 
     return (
         <div className="mt-12 mb-8 flex flex-col gap-12">
@@ -58,8 +74,9 @@ export function Invoice() {
                     <Typography variant="h6" color="white">
                         Salary Table
                     </Typography>
-                    <Button className="ml-auto" variant="gradient" color="green" onClick={()=> {handleOpen()}}>
-                        Create
+
+                    <Button className="ml-auto" variant="gradient" color="green" onClick={()=> {onPay()}}>
+                        {connecting ? 'Connecting' : !wallet ? 'Connect' : 'Create'}
                     </Button>
 
                 </CardHeader>

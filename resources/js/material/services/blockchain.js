@@ -4,22 +4,22 @@ import coinbaseWalletModule from '@web3-onboard/coinbase'
 import ledgerModule from '@web3-onboard/ledger'
 import walletConnectModule from '@web3-onboard/walletconnect'
 
-const dappId = 'd8feb4f6-076c-441a-ab9b-e23a70bcbab7'
+const dappId = process.env.MIX_dappId
 const injected = injectedModule()
 const coinbase = coinbaseWalletModule()
 const ledger = ledgerModule()
 const walletConnect = walletConnectModule({
     version: 2,
     handleUri: uri => console.log(uri),
-    projectId: '92305bbe8b80e3805d2fb91bea585ca5'
+    projectId: process.env.MIX_walletConnect_projectId
 })
-const infuraKey = 'b4d8b2570b8440c6a6528ed5dd92d5f2'
+const infuraKey = process.env.MIX_infuraKey
 // initialize Onboard
 export const initWeb3Onboard = init({
     apiKey: dappId,
-    connect: {
-        autoConnectLastWallet: true
-    },
+    // connect: {
+    //     autoConnectLastWallet: true
+    // },
     wallets: [
         injected,
         coinbase,
@@ -65,13 +65,13 @@ export const initWeb3Onboard = init({
         }
     ],
     appMetadata: {
-        name: 'Connect Wallet Example',
+        name: 'Payroll',
         icon: '<svg>My App Icon</svg>',
-        description: 'Example showcasing how to connect a wallet.',
+        description: 'it is a Demo App.',
         recommendedInjectedWallets: [
             { name: 'MetaMask', url: 'https://metamask.io' },
             { name: 'Coinbase', url: 'https://wallet.coinbase.com/' }
         ]
     },
-    theme: 'dark'
+    // theme: 'dark'
 })

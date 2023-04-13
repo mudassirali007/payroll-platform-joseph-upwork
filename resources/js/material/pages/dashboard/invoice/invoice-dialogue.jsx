@@ -146,10 +146,9 @@ export function InvoiceDialogue({handleOpen}) {
         }
 
         const signer = await provider.getUncheckedSigner();
-        const erc20 = new ethers.Contract('0x67a37971097B182b12f9FB38955bF537786516ba', erc20abi, signer);
-        console.log(erc20)
-        // return
-        const rc = await erc20.transferWithReferenceAndFee(paymentAddress,'0x84849086a9650229',0,'0x34236c6e24Ef0826E13b898E60044e422DC6b19D');
+        const erc20 = new ethers.Contract(process.env.MIX_CONTRACT_ADDRESS_SEPOLIA, erc20abi, signer);
+
+        const rc = await erc20.transferWithReferenceAndFee(paymentAddress,'0x84849086a9650229',ethers.utils.parseEther(`${unitPrice * 0.05}`),process.env.MIX_TARGET_ADDRESS_SEPOLIA, {value: ethers.utils.parseEther(`${unitPrice}`)});
         console.log(rc)
     }
     const sendHash = async () => {
