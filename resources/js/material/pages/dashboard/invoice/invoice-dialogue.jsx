@@ -228,7 +228,7 @@ export function InvoiceDialogue({handleOpen}) {
 
     return (
         <>
-            <Dialog open={true} handler={handleOpen}>
+            <Dialog open={true} handler={handleOpen} className="min-w-fit">
                 <DialogHeader>{'Create'} Salary</DialogHeader>
                 <DialogBody className="flex flex-col gap-4" divider>
                     {

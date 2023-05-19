@@ -43,22 +43,25 @@ export function Employee() {
     const selectEmployee = (data) => setSelectedEmployee(data);
 
     const onDelete = ({id}) => {
-        if(id){
-            employees.splice(employees.findIndex((obj => obj.id == id)), 1)
-            setEmployees(dispatch, employees || []);
-            axios.delete(`/api/employee/${id}`).then(response => {
-                console.log(response)
-            }).catch(error => {
-                console.error(error);
-                if(error.response) {
-                    if (error.response.data.message) {
-                        setMessage(error.response.data.message);
+        if(confirm('Do you really wanted to delete this record?')){
+            if(id){
+                employees.splice(employees.findIndex((obj => obj.id == id)), 1)
+                setEmployees(dispatch, employees || []);
+                axios.delete(`/api/employee/${id}`).then(response => {
+                    console.log(response)
+                }).catch(error => {
+                    console.error(error);
+                    if(error.response) {
+                        if (error.response.data.message) {
+                            setMessage(error.response.data.message);
+                        }
                     }
-                }
-            }).finally(()=>{
+                }).finally(()=>{
 
-            });
+                });
+            }
         }
+
     };
 
     return (

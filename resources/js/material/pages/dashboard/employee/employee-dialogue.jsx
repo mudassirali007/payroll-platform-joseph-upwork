@@ -88,7 +88,7 @@ export function EmployeeDialogue({handleOpen,employee}) {
 
     return (
         <>
-            <Dialog open={true} handler={handleOpen}>
+            <Dialog open={true} handler={handleOpen} className="min-w-fit">
                 <DialogHeader>{id?'Edit':'Add'} Employee</DialogHeader>
                 <DialogBody className="flex flex-col gap-4" divider>
                     {

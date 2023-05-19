@@ -25,7 +25,7 @@ export function ViewInvoiceDialogue({handleOpen,id}) {
 
     return (
         invoice && <>
-            <Dialog open={true} handler={handleOpen}>
+            <Dialog open={true} handler={handleOpen} className="min-w-fit">
                 <DialogHeader>{'View'} Salary</DialogHeader>
                 <DialogBody className="flex flex-col gap-4" divider>
                     <div className="flex gap-1">

@@ -1,10 +1,10 @@
 import {
-  HomeIcon,
-  UserCircleIcon,
-  TableCellsIcon,
-  BellIcon,
-  ArrowRightOnRectangleIcon,
-  UserPlusIcon,
+    HomeIcon,
+    UserCircleIcon,
+    TableCellsIcon,
+    BellIcon,
+    ArrowRightOnRectangleIcon,
+    UserPlusIcon,
     UserIcon,
     DocumentTextIcon
 } from "@heroicons/react/24/solid";
