@@ -40,7 +40,7 @@ class InvoiceController extends Controller
       $validator = Validator::make($request->all(), [
                 'employee_id' => ['required', 'integer'],
                 'currency' => ['required', 'string', 'max:255'],
-                'unit_price' => ['required', 'integer'],
+                'unit_price' => ['required', 'string', 'max:255'],
                 'payment_address' => ['required', 'string', 'max:255'],
                 'payment_currency' => ['required', 'string', 'max:255'],
             ]);

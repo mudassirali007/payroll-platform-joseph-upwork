@@ -103,8 +103,8 @@ export function InvoiceDialogue({handleOpen}) {
     };
 
     const [web3Onboard, setWeb3Onboard] = useState(null)
-    // default test transaction to Goerli
-    const [toChain, setToChain] = useState('0x5')
+    // default test transaction to Polygon
+    const [toChain, setToChain] = useState('0x13881')
     useEffect(() => {
         setWeb3Onboard(initWeb3Onboard)
     }, [])
@@ -148,14 +148,20 @@ export function InvoiceDialogue({handleOpen}) {
             alert('Enter Valid Amount.')
             return
         }
+
+        console.log(currency,unitPrice,paymentCurrency,paymentAddress)
+        // return
         try {
 
             const signer = await provider.getUncheckedSigner();
-            const erc20 = new ethers.Contract(process.env.MIX_CONTRACT_ADDRESS_SEPOLIA, erc20abi, signer);
+            const erc20 = new ethers.Contract(process.env.MIX_CONTRACT_ADDRESS_POLYGON, erc20abi, signer);
 
-            const rc = await erc20.transferWithReferenceAndFee(paymentAddress,'0x84849086a9650229',ethers.utils.parseEther(`${unitPrice * 0.05}`),process.env.MIX_TARGET_ADDRESS_SEPOLIA, {value: ethers.utils.parseEther(`${unitPrice}`)});
+            const rc = await erc20.transferWithReferenceAndFee(paymentAddress,'0x84849086a9650229',ethers.utils.parseEther(`${unitPrice * 0.05}`),process.env.MIX_TARGET_ADDRESS_POLYGON, {value: ethers.utils.parseEther(`${unitPrice}`)});
             console.log(rc)
-            if(rc.hash) setMessage(`https://sepolia.etherscan.io/tx/${rc.hash}`)
+            if(rc.hash) {
+                setMessage(`'https://mumbai.polygonscan.com/tx/'${rc.hash}`)
+            }
+
         } catch (e) {
             setMessage(e.message)
         }
@@ -302,7 +308,7 @@ export function InvoiceDialogue({handleOpen}) {
                     <Button disabled={loaderVisible} variant="gradient" color="green"
                             onClick={()=>onPay()}
                     >
-                        <span>{connecting ? 'Connecting' : !wallet ? 'Connect' : 'Pay'}</span>
+                        <span>{connecting ? 'Connecting' : !wallet ? 'Connect' : ''}</span>Pay
                         {loaderVisible && <ButtonLoader />}
                     </Button>
 
