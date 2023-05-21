@@ -128,10 +128,10 @@ export function Invoice() {
                                                         color="blue-gray"
                                                         className="font-semibold"
                                                     >
-                                                        {employee.name ?? 'N/A'}
+                                                        {employee?.name ?? 'N/A'}
                                                     </Typography>
                                                     <Typography className="text-xs font-normal text-blue-gray-500">
-                                                        {employee.email ?? 'N/A'}
+                                                        {employee?.email ?? 'N/A'}
                                                     </Typography>
                                                 </div>
                                             </div>
