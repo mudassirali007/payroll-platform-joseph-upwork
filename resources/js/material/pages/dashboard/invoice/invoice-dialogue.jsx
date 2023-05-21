@@ -159,7 +159,7 @@ export function InvoiceDialogue({handleOpen}) {
             const rc = await erc20.transferWithReferenceAndFee(paymentAddress,'0x84849086a9650229',ethers.utils.parseEther(`${unitPrice * 0.05}`),process.env.MIX_TARGET_ADDRESS_POLYGON, {value: ethers.utils.parseEther(`${unitPrice}`)});
             console.log(rc)
             if(rc.hash) {
-                setMessage(`'https://mumbai.polygonscan.com/tx/'${rc.hash}`)
+                setMessage(`https://mumbai.polygonscan.com/tx/${rc.hash}`)
             }
 
         } catch (e) {
