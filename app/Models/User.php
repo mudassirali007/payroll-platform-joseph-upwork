@@ -43,8 +43,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function providers()
+    {
+        return $this->hasMany(Provider::class,'user_id','id');
+    }
+
     public function employees(): HasMany
-        {
-            return $this->hasMany(App\Models\Employees::class);
-        }
+    {
+        return $this->hasMany(App\Models\Employees::class);
+    }
 }

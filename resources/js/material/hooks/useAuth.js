@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 
 import {Cookies} from "react-cookie";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 import {AuthContext} from "@/context";
 import axios from "axios";
@@ -9,11 +9,16 @@ import {useConnectWallet} from "@web3-onboard/react";
 
 export const useAuth = () => {
     let navigate = useNavigate();
+    const { search, pathname } = useLocation();
 
     const user = JSON.parse(sessionStorage.getItem('user'))
     let initState = {signedIn: false, user: null}
     if(user) {
         initState = {signedIn: true, user}
+    }
+    if(new URLSearchParams(search).get('status') === 'true'){
+        initState = {signedIn: true, user: new URLSearchParams(search).get('user')}
+        sessionStorage.setItem('user',JSON.stringify(new URLSearchParams(search).get('user')))
     }
     const [userData, setUserdata] = useState(initState);
     const [{ wallet, connecting }, connect, disconnect] = useConnectWallet()
@@ -64,10 +69,20 @@ export const useAuth = () => {
         if(wallet) await disconnect(wallet)
     }
 
+    function loginFromToken(){
+        const query = new URLSearchParams(search)
+        setAsLogged(query.get('user'));
+    }
+
     function loginUserOnStartup()
     {
+        let token = null;
+        if(new URLSearchParams(search).get('token')){
+            loginFromToken()
+            token = new URLSearchParams(search).get('token')
+        }
         const cookie = new Cookies();
-        if(cookie.get('is_auth')) {
+        if(cookie.get('is_auth') || token) {
             axios.post('/api/me').then(response => {
                 setAsLogged(response.data.user)
                 // setUserdata({signedIn: true, user: response.data.user});

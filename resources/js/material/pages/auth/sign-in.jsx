@@ -1,4 +1,4 @@
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useNavigate, useLocation} from "react-router-dom";
 import {
     Card,
     CardHeader,
@@ -7,6 +7,7 @@ import {
     Input,
     Checkbox,
     Button,
+    IconButton,
     Typography, Alert,
 } from "@material-tailwind/react";
 import {useAuth} from "@/hooks/useAuth";
@@ -25,12 +26,17 @@ export function SignIn() {
 
     const {authData} = useContext(AuthContext);
     const navigate = useNavigate();
+    const { search } = useLocation();
+    const errorMessage = new URLSearchParams(search).get('errorMessage') ?? ''
+
     useEffect(() => {
         if(authData.signedIn) {
             navigate('/dashboard/home');
         }
     }, [authData]);
-
+    useEffect(() => {
+        setMessage(errorMessage)
+    }, []);
     const { setErrors, renderFieldError,  message, setMessage } = useForm();
     const [loaderVisible, setLoaderVisibility] = useState(false);
 
@@ -82,6 +88,12 @@ export function SignIn() {
         });
     };
 
+    const handleLogin = () => {
+        // Redirect to the Google login page
+        window.location.href = '/api/login/google';
+        return
+    };
+
   return (
     <>
       <img
@@ -118,6 +130,10 @@ export function SignIn() {
               Sign In
                 {loaderVisible && <ButtonLoader />}
             </Button>
+            <Button variant="gradient" fullWidth className="mt-4" onClick={handleLogin}>
+                  <i className="fab fa-google text-lg mr-4" />
+                  Login with Google
+              </Button>
             <Typography variant="small" className="mt-6 flex justify-center">
               Don't have an account?
               <Link to="/auth/sign-up">

@@ -16,7 +16,10 @@ Route::get('/{path?}', function () {
 })->where('path', '^(?!api).*?');
 Route::group(['prefix' => 'api'], function () {
     Route::post('/login', [\App\Http\Controllers\Api\LoginController::class, 'login']);
+    Route::get('/login/{provider}', [\App\Http\Controllers\Api\LoginController::class, 'redirectToProvider']);
+    Route::get('/auth/{provider}/callback', [\App\Http\Controllers\Api\LoginController::class, 'handleProviderCallback']);
     Route::post('/register', [\App\Http\Controllers\Api\RegisterController::class, 'register']);
+
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('/logout', [App\Http\Controllers\Api\LoginController::class, 'logout']);
         Route::post('/me', [App\Http\Controllers\Api\LoginController::class, 'me']);
